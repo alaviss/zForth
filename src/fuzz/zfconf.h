@@ -9,36 +9,32 @@
 
 #define ZF_ENABLE_TRACE 0
 
-
 /* Set to 1 to add boundary checks to stack operations. Increases .text size
  * by approx 100 bytes */
 
 #define ZF_ENABLE_BOUNDARY_CHECKS 1
 
-
 /* Set to 1 to enable bootstrapping of the forth dictionary by adding the
  * primitives and user veriables. On small embedded systems you may choose to
  * leave this out and start by loading a cross-compiled dictionary instead.
  * Enabling adds a few hundred bytes to the .text and .rodata segments */
- 
+
 #define ZF_ENABLE_BOOTSTRAP 1
 
+/* Set to 1 to enable typed access to memory. This allows memory read and write
+ * of signed and unsigned memory of 8, 16 and 32 bits width, as well as the
+ * zf_cell type. This adds a few hundred bytes of .text. Check the memaccess.zf
+ * file for examples how to use these operations */
 
-/* Set to 1 to enable typed access to memory. This allows memory read and write 
- * of signed and unsigned memory of 8, 16 and 32 bits width, as well as the zf_cell 
- * type. This adds a few hundred bytes of .text. Check the memaccess.zf file for
- * examples how to use these operations */
-
-#define ZF_ENABLE_TYPED_MEM_ACCESS 0
-
+#define ZF_ENABLE_TYPED_MEM_ACCESS 1
 
 /* Type to use for the basic cell, data stack and return stack. Choose a signed
  * integer type that suits your needs, or 'float' or 'double' if you need
  * floating point numbers */
 
-typedef int32_t zf_cell;
-#define ZF_CELL_FMT "%ld"
-#define ZF_SCAN_FMT "%ld"
+typedef float zf_cell;
+#define ZF_CELL_FMT "%.14g"
+#define ZF_SCAN_FMT "%f"
 
 /* zf_int use for bitops, some arch int type width is less than register width,
    it will cause sign fill, so we need manual specify it */
@@ -46,7 +42,7 @@ typedef int zf_int;
 
 /* True is defined as the bitwise complement of false. */
 #define ZF_FALSE ((zf_cell)0)
-#define ZF_TRUE ((zf_cell)~(zf_int)ZF_FALSE)
+#define ZF_TRUE ((zf_cell) ~(zf_int)ZF_FALSE)
 
 /* The type to use for pointers and addresses. 'unsigned int' is usually a good
  * choice for best performance and smallest code size */
@@ -54,12 +50,11 @@ typedef int zf_int;
 typedef unsigned int zf_addr;
 #define ZF_ADDR_FMT "%04x"
 
-
 /* Memory region sizes: dictionary size is given in bytes, stack sizes are
  * number of elements of type zf_cell */
 
-#define ZF_DICT_SIZE 512 
-#define ZF_DSTACK_SIZE 8
-#define ZF_RSTACK_SIZE 8
+#define ZF_DICT_SIZE 4096
+#define ZF_DSTACK_SIZE 32
+#define ZF_RSTACK_SIZE 32
 
 #endif
